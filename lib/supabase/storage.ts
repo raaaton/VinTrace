@@ -5,7 +5,7 @@ export async function getDocumentLinks(
     user: User,
     files: File[],
     vehicleId: string,
-    use: "cover-image" | "event-documents",
+    use: "cover-image" | "event-documents" | "showroom-gallery",
 ): Promise<string[]> {
     const supabase = createClient();
     const signedUrls: string[] = [];
@@ -14,9 +14,9 @@ export async function getDocumentLinks(
         const file = files[i];
         const fileExtension = file.name.split(".").pop();
         
-        const filePath = `${user.id}/${vehicleId}/${use}/${use}-${i}.${fileExtension}`;
+        const filePath = `${user.id}/${vehicleId}/${use}/${crypto.randomUUID()}.${fileExtension}`;
 
-        const { data, error: UploadError } = await supabase.storage
+        const { error: UploadError } = await supabase.storage
             .from("vehicle-media")
             .upload(filePath, file);
 

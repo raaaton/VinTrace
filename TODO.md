@@ -2,7 +2,7 @@
 
 ## MVP
 
-- Showroom
+- [x] Showroom
 
 ## Better
 

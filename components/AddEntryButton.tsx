@@ -30,6 +30,7 @@ import EntryTypeSelector from "./EntryTypeSelector";
 import DateInput from "@/components/DateInput";
 import DocumentUploader from "@/components/DocumentUploader";
 import { getDocumentLinks } from "@/lib/supabase/storage";
+import { resolveVisibility, type Preference } from "@/lib/showroom/model";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export default function AddEntryButton({ vehicleId }: { vehicleId: string }) {
@@ -102,6 +103,14 @@ function ProfileForm({
     const [isPending, setIsPending] = useState(false);
     const [initialKileage, setInitialKileage] = useState("");
     const [files, setFiles] = useState<File[]>([]);
+    const [sharing, setSharing] = useState<{published:boolean;preference:Preference}|null>(null);
+    const [visibility,setVisibility] = useState<string>("");
+    const [remember,setRemember] = useState(false);
+    useEffect(() => {
+        createClient().from("vehicles").select("is_public, showroom_entry_preference").eq("id",vehicleId).single().then(({data,error})=>{
+            if(data && !error) setSharing({published:data.is_public,preference:data.showroom_entry_preference as Preference});
+        });
+    },[vehicleId]);
 
     const handleFileSelect = (newFiles: File[]) => {
         if (newFiles.length > 3) {
@@ -131,6 +140,12 @@ function ProfileForm({
                 data: { user },
             } = await supabase.auth.getUser();
 
+            if(!user) throw new Error("Reconnectez-vous pour ajouter un événement.");
+            // Refetch: publication/preference may have changed in another tab.
+            const {data:current,error:sharingError}=await supabase.from("vehicles").select("is_public, showroom_entry_preference").eq("id",vehicleId).eq("owner_id",user.id).single();
+            if(sharingError || !current) throw new Error("Impossible de vérifier les réglages du showroom.");
+            setSharing({published:current.is_public,preference:current.showroom_entry_preference as Preference});
+            const visible=resolveVisibility(current.is_public,current.showroom_entry_preference as Preference,visibility===""?undefined:visibility==="public");
             const entryId = crypto.randomUUID();
 
             const payload = {
@@ -162,16 +177,21 @@ function ProfileForm({
                 detailer: formData.get("detailer") as string,
                 type: formData.get("type") as EntryType,
                 documents: uploadedUrls,
+                showroom_visible: visible,
             });
 
             if (error) throw error;
 
+            if(remember && current.is_public && current.showroom_entry_preference==="ask") {
+                const {error:preferenceError}=await supabase.from("vehicles").update({showroom_entry_preference:visible?"public":"private"}).eq("id",vehicleId).eq("owner_id",user.id);
+                if(preferenceError) toast.error("Événement ajouté, mais la préférence n’a pas pu être mémorisée.");
+            }
             toast.success("Entrée ajoutée avec succès !");
             setOpen(false);
             router.refresh();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Détails complets de l'erreur :", error);
-            if (error.message) {
+            if (error instanceof Error) {
                 toast.error(`Erreur : ${error.message}`);
             } else {
                 toast.error("Erreur inconnue, vérifie la console");
@@ -265,6 +285,13 @@ function ProfileForm({
                 />
             </div>
 
+            {sharing?.published && sharing.preference==="ask" && <fieldset className="space-y-3 border border-border p-4">
+                <legend className="px-1 text-sm font-medium">Afficher cet événement dans le showroom ?</legend>
+                <label className="flex gap-2 text-sm"><input type="radio" name="showroom-visibility" value="public" required checked={visibility==="public"} onChange={()=>setVisibility("public")}/>Afficher</label>
+                <label className="flex gap-2 text-sm"><input type="radio" name="showroom-visibility" value="private" required checked={visibility==="private"} onChange={()=>setVisibility("private")}/>Garder privé</label>
+                <label className="flex gap-2 text-sm"><input type="checkbox" checked={remember} onChange={e=>setRemember(e.target.checked)}/>Mémoriser mon choix pour les prochains événements</label>
+                <p className="text-xs text-muted-foreground">Modifiable dans Showroom → Personnaliser. Les notes et les documents restent privés par défaut.</p>
+            </fieldset>}
             {/* File.s uploading / Certification checkbox */}
             <div className="flex flex-col gap-3 justify-center">
                 <Label>Document(s)</Label>
@@ -288,7 +315,7 @@ function ProfileForm({
                         htmlFor="attestation"
                         className="text-sm font-normal leading-snug cursor-pointer select-none"
                     >
-                        J'atteste sur l'honneur l'exactitude des données saisies
+                        J’atteste sur l’honneur l’exactitude des données saisies
                         dans le document.
                     </Label>
                 </div>

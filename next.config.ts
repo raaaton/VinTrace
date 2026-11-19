@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
     images: {
+        // Prevent the optimizer from caching access-controlled showroom media.
+        localPatterns: [{ pathname: "/images/**", search: "" }],
         remotePatterns: [
             {
                 protocol: "https",

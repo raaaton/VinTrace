@@ -49,7 +49,7 @@ export async function updateSession(request: NextRequest) {
 
     // Private routes protections
     const isPublicRoute =
-        pathname === "/" || pathname === "/robots.txt" || isAuthRoute;
+        pathname === "/" || pathname === "/robots.txt" || pathname.startsWith("/s/") || pathname.startsWith("/api/showroom/") || isAuthRoute;
 
     if (!user && !isPublicRoute) {
         const url = request.nextUrl.clone();

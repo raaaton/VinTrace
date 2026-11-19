@@ -41,6 +41,9 @@ export type Database = {
     Tables: {
       entries: {
         Row: {
+          showroom_visible: boolean | null
+          showroom_show_notes: boolean
+          showroom_photo_indices: number[]
           cost: number | null
           created_at: string | null
           description: string | null
@@ -55,6 +58,9 @@ export type Database = {
           vehicle_id: string
         }
         Insert: {
+          showroom_visible?: boolean | null
+          showroom_show_notes?: boolean
+          showroom_photo_indices?: number[]
           cost?: number | null
           created_at?: string | null
           description?: string | null
@@ -69,6 +75,9 @@ export type Database = {
           vehicle_id: string
         }
         Update: {
+          showroom_visible?: boolean | null
+          showroom_show_notes?: boolean
+          showroom_photo_indices?: number[]
           cost?: number | null
           created_at?: string | null
           description?: string | null
@@ -247,6 +256,12 @@ export type Database = {
       }
       vehicles: {
         Row: {
+          public_token: string
+          showroom_description: string
+          showroom_gallery: string[]
+          showroom_show_costs: boolean
+          showroom_mask_vin: boolean
+          showroom_entry_preference: string
           cover_image_url: string
           created_at: string | null
           id: string
@@ -261,6 +276,12 @@ export type Database = {
           year: number
         }
         Insert: {
+          public_token?: string
+          showroom_description?: string
+          showroom_gallery?: string[]
+          showroom_show_costs?: boolean
+          showroom_mask_vin?: boolean
+          showroom_entry_preference?: string
           cover_image_url?: string
           created_at?: string | null
           id?: string
@@ -275,6 +296,12 @@ export type Database = {
           year: number
         }
         Update: {
+          public_token?: string
+          showroom_description?: string
+          showroom_gallery?: string[]
+          showroom_show_costs?: boolean
+          showroom_mask_vin?: boolean
+          showroom_entry_preference?: string
           cover_image_url?: string
           created_at?: string | null
           id?: string
@@ -303,6 +330,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      save_showroom_settings: {
+        Args: { p_vehicle_id: string; p_settings: Json }
+        Returns: undefined
+      }
       generate_car_slug: {
         Args: { make: string; model: string }
         Returns: string

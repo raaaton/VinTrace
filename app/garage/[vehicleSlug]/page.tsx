@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft, ArrowUpRight, Settings, Plus } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Settings } from "lucide-react";
 import Link from "next/link";
 import {
     Tooltip,
@@ -39,7 +39,7 @@ export async function generateMetadata({
 export default async function VehiclePage({
     params,
 }: {
-    params: { vehicleSlug: string };
+    params: Promise<{ vehicleSlug: string }>;
 }) {
     const supabase = await createClient();
     const { vehicleSlug } = await params;
@@ -80,19 +80,9 @@ export default async function VehiclePage({
                         </TooltipContent>
                     </Tooltip>
 
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Link
-                                href="#"
-                                className="flex items-center gap-4 px-3 py-2 lg:px-4 lg:py-3  text-primary-foreground bg-foreground hover:bg-stone-300 uppercase text-xs font-semibold transition-colors ease-out"
-                            >
-                                Showroom <ArrowUpRight size={16} />
-                            </Link>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>En construction 🚧</p>
-                        </TooltipContent>
-                    </Tooltip>
+                    <Link href={`/garage/${vehicleSlug}/showroom`} className="flex items-center gap-4 px-3 py-2 lg:px-4 lg:py-3 text-primary-foreground bg-foreground hover:bg-stone-300 uppercase text-xs font-semibold transition-colors ease-out">
+                        Showroom <ArrowUpRight size={16} />
+                    </Link>
                 </div>
             </nav>
 

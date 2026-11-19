@@ -2,6 +2,10 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
+        "test": "node --experimental-strip-types --test --test-isolation=none tests/*.test.ts",
+        "test:db": "node tests/showroom.db-check.mjs",
+        "test:http": "node tests/showroom.http-check.mjs",
+        "test:e2e": "node --env-file=.env.local tests/showroom.e2e.cjs",
         "build": "next build",
         "start": "next start",
         "lint": "eslint .",

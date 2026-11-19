@@ -84,4 +84,4 @@ pnpm dev
   - [x] Dashboard "Garage" (fetch les véhicules).
   - [x] Ajout de véhicule : Formulaire de création (Marque, Modèle, Année, VIN) avec validation stricte.
 - [x] Timeline d'événements avec Upload Storage.
-- [ ] Showroom public.
+- [x] Showroom public : aperçu privé, personnalisation et partage révocable (voir `docs/SHOWROOM.md`).
