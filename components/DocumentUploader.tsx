@@ -21,12 +21,16 @@ export default function DocumentUploader({
     setFilesAction,
     accepts,
     fileLimit,
+    maxSize = 50 * 1024 * 1024,
+    disabled = false,
 }: {
     isDesktop: boolean;
     files: File[];
     setFilesAction: (files: File[]) => void;
     accepts: string;
     fileLimit: number;
+    maxSize?: number;
+    disabled?: boolean;
 }) {
     const onFileReject = React.useCallback((file: File) => {
         toast.error("Upload failed", {
@@ -39,7 +43,9 @@ export default function DocumentUploader({
         return (
             <FileUpload
                 maxFiles={fileLimit}
-                maxSize={50 * 1024 * 1024}
+                multiple={fileLimit > 1}
+                disabled={disabled}
+                maxSize={maxSize}
                 accept={accepts}
                 className="w-full"
                 value={files}
@@ -53,11 +59,9 @@ export default function DocumentUploader({
                                 <Upload className="size-6 text-muted-foreground" />
                             </div>
                             <p className="font-medium text-sm">
-                                Glissez et déposez un
                                 {accepts.includes(".pdf")
-                                    ? " document"
-                                    : "e image"}{" "}
-                                ici
+                                    ? "Glissez et déposez un document ici"
+                                    : "Glissez et déposez une image ici"}
                             </p>
                             <p className="text-xs">Ou cliquez pour parcourir</p>
                             <p className="text-muted-foreground text-xs">
@@ -106,15 +110,17 @@ export default function DocumentUploader({
     // Mobile: Simple file picker button
     return (
         <FileUpload
-            maxFiles={1}
-            maxSize={50 * 1024 * 1024}
+            maxFiles={fileLimit}
+                multiple={fileLimit > 1}
+                disabled={disabled}
+            maxSize={maxSize}
             accept={accepts}
             className="w-full"
             value={files}
             onValueChange={setFilesAction}
             onFileReject={onFileReject}
         >
-            {!files.length && (
+            {files.length < fileLimit && (
                 <FileUploadTrigger asChild>
                     <Button variant="outline" className="w-full">
                         Parcourir les fichiers

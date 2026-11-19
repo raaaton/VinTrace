@@ -56,3 +56,11 @@ Vérifications sur la vraie base : accès serveur valide, lectures anonymes des 
 Pour reproduire ce test : démarrer le build sur le port 8766 puis lancer `npm run test:e2e`. Attention : ce test crée un compte et un dossier temporaires sur la base configurée dans `.env.local`, puis les supprime. Il ne fait pas partie de `npm test`.
 
 L'environnement de production hébergé et le déploiement ne sont pas modifiés par cette configuration locale.
+
+## Présentation du showroom
+
+La présentation reprend la maquette claire : couverture et identité côte à côte sur ordinateur, empilées sur téléphone ; historique sur fond blanc et archives privées sur fond sombre. Le showroom possède son propre pied de page et masque la navigation globale du garage. Aucun badge de certification ni contenu de justificatif n'est ajouté.
+
+Les boutons Retour et Paramètres reprennent le traitement de la fiche véhicule. Les formulaires réutilisent Checkbox, RadioGroup et DocumentUploader. Personnaliser et Partager utilisent un drawer sous 768 px ; la personnalisation conserve son bouton d'enregistrement visible en bas pendant le défilement. Au-dessus, personnalisation en dialogue et partage en popover. L'upload permet la sélection multiple (jusqu'à 20 images, 10 Mo chacune), y compris les extensions de caméra en majuscules.
+
+Vérification navigateur : vues 1440 × 1000 et 390 × 844, absence de débordement horizontal, composants du formulaire, drawer de partage et enregistrement du masquage du VIN vérifiés sur un dossier temporaire ensuite supprimé.

@@ -32,6 +32,7 @@ import DocumentUploader from "@/components/DocumentUploader";
 import { getDocumentLinks } from "@/lib/supabase/storage";
 import { resolveVisibility, type Preference } from "@/lib/showroom/model";
 import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export default function AddEntryButton({ vehicleId }: { vehicleId: string }) {
     const [open, setOpen] = useState(false);
@@ -287,9 +288,11 @@ function ProfileForm({
 
             {sharing?.published && sharing.preference==="ask" && <fieldset className="space-y-3 border border-border p-4">
                 <legend className="px-1 text-sm font-medium">Afficher cet événement dans le showroom ?</legend>
-                <label className="flex gap-2 text-sm"><input type="radio" name="showroom-visibility" value="public" required checked={visibility==="public"} onChange={()=>setVisibility("public")}/>Afficher</label>
-                <label className="flex gap-2 text-sm"><input type="radio" name="showroom-visibility" value="private" required checked={visibility==="private"} onChange={()=>setVisibility("private")}/>Garder privé</label>
-                <label className="flex gap-2 text-sm"><input type="checkbox" checked={remember} onChange={e=>setRemember(e.target.checked)}/>Mémoriser mon choix pour les prochains événements</label>
+                <RadioGroup name="showroom-visibility" required value={visibility} onValueChange={setVisibility} aria-label="Visibilité de l’événement">
+                    <label className="flex min-h-11 items-center gap-3 text-sm"><RadioGroupItem value="public" className="data-[state=checked]:border-primary data-[state=checked]:bg-primary"/>Afficher</label>
+                    <label className="flex min-h-11 items-center gap-3 text-sm"><RadioGroupItem value="private" className="data-[state=checked]:border-primary data-[state=checked]:bg-primary"/>Garder privé</label>
+                </RadioGroup>
+                <label className="flex min-h-11 items-center gap-3 text-sm"><Checkbox checked={remember} onCheckedChange={checked=>setRemember(checked===true)}/>Mémoriser mon choix pour les prochains événements</label>
                 <p className="text-xs text-muted-foreground">Modifiable dans Showroom → Personnaliser. Les notes et les documents restent privés par défaut.</p>
             </fieldset>}
             {/* File.s uploading / Certification checkbox */}

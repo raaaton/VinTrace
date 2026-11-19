@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { acceptsUpload } from "@/lib/upload-accept";
 import { useAsRef } from "@/hooks/use-as-ref";
 import { useLazyRef } from "@/hooks/use-lazy-ref";
 
@@ -550,26 +551,11 @@ function FileUpload(props: FileUploadProps) {
                     }
                 }
 
-                if (acceptTypes) {
-                    const fileType = file.type;
-                    const fileExtension = `.${file.name.split(".").pop()}`;
-
-                    if (
-                        !acceptTypes.some(
-                            (type) =>
-                                type === fileType ||
-                                type === fileExtension ||
-                                (type.includes("/*") &&
-                                    fileType.startsWith(
-                                        type.replace("/*", "/"),
-                                    )),
-                        )
-                    ) {
-                        rejectionMessage = "File type not accepted";
-                        propsRef.current.onFileReject?.(file, rejectionMessage);
-                        rejected = true;
-                        invalid = true;
-                    }
+                if (acceptTypes && !acceptsUpload(file, acceptTypes)) {
+                    rejectionMessage = "File type not accepted";
+                    propsRef.current.onFileReject?.(file, rejectionMessage);
+                    rejected = true;
+                    invalid = true;
                 }
 
                 if (maxSize && file.size > maxSize) {

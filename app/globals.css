@@ -136,3 +136,9 @@ html {
 [data-state="inactive"]:first-child {
     color: rgb(161 161 170) !important; /* la couleur grise habituelle */
 }
+
+/* The showroom is a standalone presentation, outside the garage chrome. */
+body:has(.showroom-page) [data-site-header],
+body:has(.showroom-page) [data-site-footer] {
+    display: none;
+}

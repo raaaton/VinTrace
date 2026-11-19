@@ -16,7 +16,7 @@ const checked=async q=>{const r=await q;if(r.error)throw Error(r.error.message);
  const signed=await checked(admin.storage.from('vehicle-media').createSignedUrl(path,3600));
  const vehicle=await checked(owner.from('vehicles').insert({id:vid,owner_id:uid,make:'TEST',model:'Showroom test',year:2000,kileage:120000,license_plate:'TEST',vin:'TESTVIN0011123456',slug,cover_image_url:signed.signedUrl}).select().single());
  const cookie=[...cookieMap].map(([n,v])=>`${n}=${v}`).join('; ');
- let res=await fetch(origin+`/garage/${slug}/showroom`,{headers:{cookie}});assert.equal(res.status,200);console.log('PASS aperçu propriétaire privé');
+ let res=await fetch(origin+`/garage/${vehicle.slug}/showroom`,{headers:{cookie}});assert.equal(res.status,200);assert.ok((await res.text()).includes('Personnaliser le showroom'));console.log('PASS aperçu propriétaire privé');
  const token=vehicle.public_token;res=await fetch(origin+'/s/'+token);assert.equal(res.status,404);console.log('PASS showroom non publié inaccessible');
  const entry=await checked(owner.from('entries').insert({vehicle_id:vid,owner_id:uid,title:'Entretien test',event_date:'2026-11-19',type:'service',kileage:120000,cost:654.32,description:'NOTE_PRIVEE_TEST',documents:[signed.signedUrl]}).select().single());
  await checked(owner.rpc('save_showroom_settings',{p_vehicle_id:vid,p_settings:{description:'Présentation test',showCosts:false,maskVin:true,preference:'ask',gallery:[],entries:[{id:entry.id,visible:true,showNotes:false,photos:[]}]}}));
