@@ -33,7 +33,7 @@ export default function Loading() {
                     <span className={secondaryButton}><ArrowLeft size={16} /><span className="hidden md:inline">Retour</span></span>
                     <div className="flex items-center gap-3">
                         <span className={secondaryButton}><Settings size={16} /></span>
-                        <span className="flex items-center gap-2 bg-foreground px-3 py-2 text-xs font-semibold uppercase text-primary-foreground lg:px-4 lg:py-3"><Share2 size={16} />Partager</span>
+                        <span className="flex items-center gap-2 bg-black px-3 py-2 text-xs font-semibold uppercase text-white lg:px-4 lg:py-3"><Share2 size={16} />Partager</span>
                     </div>
                 </div>
 

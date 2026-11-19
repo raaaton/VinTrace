@@ -6,14 +6,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerClose } from '@/components/ui/drawer';
 import { X } from 'lucide-react';
 
-export default function ShowroomPanel({ open, onOpenChange, title, description, children, footer }: {
+export default function ShowroomPanel({ open, onOpenChange, title, description, children, footer, className = '' }: {
     open: boolean; onOpenChange: (open: boolean) => void; title: string;
-    description: string; children: ReactNode; footer?: ReactNode;
+    description: string; children: ReactNode; footer?: ReactNode; className?: string;
 }) {
     const isDesktop = useMediaQuery('(min-width: 768px)');
     if (isDesktop) return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="flex max-h-[90dvh] flex-col gap-0 overflow-hidden p-0 sm:max-w-2xl">
+            <DialogContent className={`flex max-h-[90dvh] flex-col gap-0 overflow-hidden p-0 sm:max-w-2xl ${className}`}>
                 <DialogHeader className="shrink-0 border-b border-border p-6 pr-12">
                     <DialogTitle>{title}</DialogTitle><DialogDescription>{description}</DialogDescription>
                 </DialogHeader>
@@ -24,7 +24,7 @@ export default function ShowroomPanel({ open, onOpenChange, title, description, 
     );
     return (
         <Drawer open={open} onOpenChange={onOpenChange}>
-            <DrawerContent className="!max-h-[92dvh]">
+            <DrawerContent className={`!max-h-[92dvh] ${className}`}>
                 <DrawerHeader className="relative shrink-0 border-b border-border pr-14 text-left">
                     <DrawerTitle>{title}</DrawerTitle><DrawerDescription>{description}</DrawerDescription>
                     <DrawerClose aria-label="Fermer" className="absolute right-4 top-4 p-2 text-muted-foreground"><X size={18} /></DrawerClose>

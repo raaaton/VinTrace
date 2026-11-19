@@ -61,7 +61,7 @@ export default function ShowroomControls({vehicle,entries}:{vehicle:Tables<'vehi
  const shareBody=(
     <div className="space-y-5">
         {published ? <>
-            <span className="inline-flex items-center gap-2 bg-green-500/10 px-3 py-1 text-xs text-green-500"><span className="size-1.5 rounded-full bg-current" />Actif</span>
+            <span className="inline-flex items-center gap-2 bg-green-500/10 px-3 py-1 text-xs text-green-700"><span className="size-1.5 rounded-full bg-current" />Actif</span>
             <div className="flex min-w-0 items-center gap-2 border border-border bg-secondary/30 p-2">
                 <Input aria-label="Lien public du showroom" value={link} readOnly className="min-w-0 border-0 bg-transparent text-xs" />
                 <Button variant="outline" size="icon" className="shrink-0" aria-label="Copier le lien" onClick={async()=>{
@@ -70,7 +70,7 @@ export default function ShowroomControls({vehicle,entries}:{vehicle:Tables<'vehi
                 }}><Copy size={16} /></Button>
             </div>
             <Button asChild className="w-full"><a href={`/s/${vehicle.public_token}`} target="_blank" rel="noreferrer"><ExternalLink size={16} />Voir la page publique</a></Button>
-            <Button variant="ghost" disabled={pending} className="w-full text-red-400" onClick={()=>publish(false)}>Dépublier la page</Button>
+            <Button variant="ghost" disabled={pending} className="w-full text-red-600" onClick={()=>publish(false)}>Dépublier la page</Button>
         </> : <>
             <p className="text-sm leading-relaxed text-muted-foreground">Vérifiez le contenu dans « Personnaliser » avant de publier.</p>
             <Button disabled={pending} className="w-full" onClick={()=>publish(true)}>{pending?'Publication…':'Publier la page'}</Button>
@@ -141,7 +141,7 @@ export default function ShowroomControls({vehicle,entries}:{vehicle:Tables<'vehi
     </fieldset>
  );
  const secondaryButton='flex items-center gap-2 p-2 md:px-3 md:py-2 lg:px-4 lg:py-3 backdrop-blur-md bg-secondary/35 hover:bg-secondary/50 uppercase text-xs font-semibold border border-foreground/25 transition-colors ease-out';
- const shareButton=<button className="flex items-center gap-2 px-3 py-2 lg:px-4 lg:py-3 text-primary-foreground bg-foreground hover:bg-stone-300 uppercase text-xs font-semibold transition-colors ease-out"><Share2 size={16} />Partager</button>;
+ const shareButton=<button className="flex items-center gap-2 px-3 py-2 lg:px-4 lg:py-3 text-white bg-black hover:bg-stone-800 uppercase text-xs font-semibold transition-colors ease-out"><Share2 size={16} />Partager</button>;
  return <>
     <nav aria-label="Gestion du showroom" className="absolute inset-x-0 top-0 z-[60] flex items-center justify-between gap-3 p-6 lg:p-12">
         <Link href={`/garage/${vehicle.slug}`} className={secondaryButton} aria-label="Retour au véhicule"><ArrowLeft size={16} /><span className="hidden md:inline">Retour</span></Link>
@@ -149,15 +149,15 @@ export default function ShowroomControls({vehicle,entries}:{vehicle:Tables<'vehi
             <button className={secondaryButton} onClick={()=>setEditing(true)} aria-label="Personnaliser le showroom" title="Personnaliser"><Settings size={16} /></button>
             {isDesktop ? <Popover open={sharing} onOpenChange={changeSharing}>
                 <PopoverTrigger asChild>{shareButton}</PopoverTrigger>
-                <PopoverContent align="end" sideOffset={12} className="w-[min(380px,calc(100vw-32px))] space-y-5 p-6 shadow-2xl">
+                <PopoverContent align="end" sideOffset={12} className="showroom-share-light w-[min(380px,calc(100vw-32px))] space-y-5 p-6 shadow-2xl">
                     <h2 className="text-lg font-semibold">{published?'Showroom public':'Partager le showroom'}</h2>
                     <p className="text-sm leading-relaxed text-muted-foreground">{shareDescription}</p>
                     {shareBody}
                 </PopoverContent>
-            </Popover> : <button onClick={()=>changeSharing(true)} className="flex items-center gap-2 bg-foreground px-3 py-2 text-xs font-semibold uppercase text-primary-foreground"><Share2 size={16} />Partager</button>}
+            </Popover> : <button onClick={()=>changeSharing(true)} className="flex items-center gap-2 bg-black px-3 py-2 text-xs font-semibold uppercase text-white transition-colors hover:bg-stone-800"><Share2 size={16} />Partager</button>}
         </div>
     </nav>
-    {!isDesktop && <ShowroomPanel open={sharing} onOpenChange={changeSharing} title={published?'Showroom public':'Partager le showroom'} description={shareDescription}>{shareBody}</ShowroomPanel>}
+    {!isDesktop && <ShowroomPanel className="showroom-share-light" open={sharing} onOpenChange={changeSharing} title={published?'Showroom public':'Partager le showroom'} description={shareDescription}>{shareBody}</ShowroomPanel>}
     <ShowroomPanel open={editing} onOpenChange={open=>{if(!pending)setEditing(open);}} title="Personnaliser le showroom" description="Choisissez ce que les visiteurs peuvent voir. Les changements enregistrés s’appliquent immédiatement."
         footer={<Button className="w-full" disabled={pending} onClick={save}>{pending?'Enregistrement…':'Enregistrer les modifications'}</Button>}>
         {settingsBody}
