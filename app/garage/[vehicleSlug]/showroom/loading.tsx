@@ -23,6 +23,7 @@ function EventSkeleton() {
 
 export default function Loading() {
     const secondaryButton = 'flex items-center gap-2 p-2 md:px-3 md:py-2 lg:px-4 lg:py-3 backdrop-blur-md bg-secondary/35 uppercase text-xs font-semibold border border-foreground/25 text-foreground';
+    const actionButton = 'flex items-center gap-2 bg-black px-3 py-2 text-xs font-semibold uppercase text-white lg:px-4 lg:py-3';
     return (
         <div className="showroom-page relative w-full bg-white text-stone-950" aria-busy="true">
             <ScrollToTop />
@@ -32,8 +33,8 @@ export default function Loading() {
                 <div className="absolute inset-x-0 top-0 z-[60] flex items-center justify-between gap-3 p-6 lg:p-12">
                     <span className={secondaryButton}><ArrowLeft size={16} /><span className="hidden md:inline">Retour</span></span>
                     <div className="flex items-center gap-3">
-                        <span className={secondaryButton}><Settings size={16} /></span>
-                        <span className="flex items-center gap-2 bg-black px-3 py-2 text-xs font-semibold uppercase text-white lg:px-4 lg:py-3"><Share2 size={16} />Partager</span>
+                        <span className={actionButton}><Settings size={16} /></span>
+                        <span className={actionButton}><Share2 size={16} />Partager</span>
                     </div>
                 </div>
 
